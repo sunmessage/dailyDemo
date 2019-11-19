@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>弹幕</title>
+  <!-- <style>
+    * {
+      display: inline;
+    }
+  </style> -->
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="main">
+      <canvas id="canvas" style="position: absolute;">
+        对不起，您的浏览器暂不支持！
+      </canvas>
+      <video id="video" src="./mv.mp4" width="720" height="480" controls></video>
+    </div>
+
+    <div class="content">
+      <input type="text" id="text">
+      <input type="button" id="button" value="发弹幕">
+      <input type="color" id="color">
+      <input type="range" id="range">
+    </div>
+
+  </div>
+</body>
+<script src="../publicRelies/eventUtil.js"></script>
+<script src="../publicRelies/eventProxy.js"></script>
+<script src="barrage.js"></script>
+<script>
+  const canvas = document.getElementById('canvas')
+  const video = document.getElementById('video')
+  const content = document.querySelector('.content')
+
+  const initData = [
+    {
+      color: 'red',
+      fontSize: '48px serif',
+      opacity: 1,
+      time: 0,
+      speed: 0,
+      value: '埋埋超可爱',
+    },
+    {
+      color: 'red',
+      fontSize: '48px serif',
+      opacity: 1,
+      time: 0,
+      speed: 0,
+      startY: 160,
+      value: '埋埋超可爱',
+    },
+    {
+      color: 'green',
+      fontSize: '58px serif',
+      opacity: 1,
+      time: 0,
+      speed: 0,
+      startY: 60,
+      value: '埋埋超超超可爱',
+    },
+    {
+      color: 'blue',
+      fontSize: '68px serif',
+      opacity: 1,
+      time: 0,
+      speed: 0,
+      startY: 320,
+      value: '埋埋宇宙无敌超超超可爱',
+    },
+  ]
+
+  const videoBarrage = new VideoBarrage(canvas, video, initData)
+  const eventUtil = new EventUtil(content, 'click', videoBarrage.clearCanvas.bind(videoBarrage))
+  eventUtil.addHandler()
+
+</script>
+
+</html>

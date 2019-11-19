@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <canvas id="wrap" width="1200" height="400">
+    对不起，您的浏览器不支持canvas
+  </canvas>
+</body>
+<script src="../publicRelies/canvasLine.js"></script>
+
+<script>
+  const canvas = document.getElementById('wrap')
+
+  if (canvas.getContext) {
+    const context = canvas.getContext('2d');
+    
+    function Outline() {
+      return [
+        stroke(0.5, 50, 150, 200, 210),
+        stroke(0, 100, 110, 50, 250),
+        stroke(0.5, 40, 160, 300, 310),
+        stroke(-0.8, 140, 180, 85, 100),
+        stroke(0, 170, 350, 20, 30),
+        stroke(-2.5, 170, 210, -385, -405),
+        stroke(2.5, 310, 350, 892, 917),
+        stroke(0, 210, 310, 120, 140),
+        stroke(0, 190, 330, 70, 80),
+        stroke(0, 255, 265, 20, 260),
+        stroke(0, 200, 320, 190, 200),
+        stroke(0, 160, 360, 250, 260),
+        stroke(-2, 350, 370, -460, -480),
+      ]
+    }
+
+    setTimeout(function () {
+      for (let i = 0; i < 2000; i++) {
+        const outline = Outline()
+        outline.forEach(item => {
+          const r = Math.floor((Math.random() * 1000) / 3.8)
+          const g = Math.floor((Math.random() * 1000) / 3.8)
+          const b = Math.floor((Math.random() * 1000) / 3.8)
+
+          context.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+          context.fillRect(item.x, item.y, 3, 3);
+        })
+      }
+    }, 0)
+
+  }
+</script>
+
+</html>
