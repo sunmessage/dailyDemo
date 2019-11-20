@@ -2,7 +2,7 @@
 
 class VideoBarrage {
   constructor(canvas, video, initData) {
-    if(!canvas || !video) {
+    if (!canvas || !video) {
       return ''
     }
 
@@ -24,10 +24,10 @@ class VideoBarrage {
     const self = this
     const baseData = {
       ctx: self.canvas.getContext('2d'),
-      width: self.video.width,
-      height: self.video.height,
-      startX: self.video.width,
-      startY: Math.floor(Math.random() * self.video.height),
+      canvasWidth: self.video.width,
+      canvasHeight: self.video.height,
+      X: self.video.width,
+      officialData: self.initData.map(singleBarrage => new SingleBarrage(singleBarrage, self))
     }
 
     // 以这种手法增添类基础变量，挺不错的，针对类内部产生的数据
@@ -43,34 +43,57 @@ class VideoBarrage {
   // 填充弹幕内容
   drawCanvas() {
     const self = this
-
     self.clearCanvas()
-    self.initData.forEach(singleBarrage => {
-      const { color, fontSize, opacity, time, speed, value, startY } = singleBarrage
-      self.getBarrageWidth(value)
+
+    self.officialData.forEach(singleBarrage => {
+      const { color, fontSize, opacity, time, speed, value, startX, startY } = singleBarrage
       self.ctx.fillStyle = color
       self.ctx.font = fontSize
-      self.ctx.fillText(value, self.startX, startY)
-
+      self.ctx.fillText(value, self.X, startY)
     })
 
-    self.startX--
-    (self.startX >= -600) && requestAnimationFrame(self.drawCanvas.bind(self))
+    self.X--
+
+    // requestAnimationFrame按一定的时间，周期完整执行回调函数
+    (self.canvasWidth > -600) && requestAnimationFrame(self.drawCanvas.bind(self))
   }
 
   // 清理弹幕内容
   clearCanvas() {
     const self = this
-    self.ctx.clearRect(0, 0, self.width, self.height)
+    self.ctx.clearRect(0, 0, self.canvasWidth, self.canvasHeight)
   }
 
-  // 获取每条弹幕内容长度
-  getBarrageWidth(value) {
+}
+
+// 创建单条弹幕类
+// 目的一、结构清晰，使得VideoBarrage类只存在初始化数据、渲染弹幕、清理弹幕三个动作
+// 目的二、解决每条弹幕由于同步执行导致初始化startY值相同（原来class可以解决同步初始化造成的问题）
+class SingleBarrage {
+  constructor(barrage, parentClass) {
+    for(const key in barrage) {
+      this[key] = barrage[key]
+    }
+
+    this.initBarrage(parentClass)
+  }
+
+  initBarrage(parentClass) {
+    const self = this
     const temporaryNode = document.createElement('p')
-    package.style.display = 'inline-block'
-    temporaryNode.innerText = value
-    console.log(temporaryNode.clientWidth)
+    temporaryNode.style.display = 'inline-block'
+    temporaryNode.innerText = self.value
+    document.body.appendChild(temporaryNode)
+
+    const singleBbarrageMessage = {
+      startX: parentClass.video.width,
+      startY: Math.floor(Math.random() * parentClass.video.height),
+      contentWidth: temporaryNode.clientWidth,
+      contentHeight: temporaryNode.clientHeight,
+    }
+
+    Object.assign(self, singleBbarrageMessage)
+
+    document.body.removeChild(temporaryNode)
   }
-
-
 }
