@@ -131,6 +131,6 @@ class SingleBarrage {
 
 /**
  * 主要思想
- * 通过不断清理绘制canvas实习
+ * 通过不断清理绘制canvas实现
  * 
  */
