@@ -49,11 +49,11 @@ class VideoBarrage {
     self.clearLastAnimation()
 
     const cancelAniamtion = self.officialData.map(singleBarrage => {
-      const { color, fontSize, opacity, time, speed, value, startX, startY } = singleBarrage
+      const { color, fontSize, speed, value, startX, startY } = singleBarrage
       self.ctx.fillStyle = color
       self.ctx.font = fontSize
       self.ctx.fillText(value, startX, startY)
-      singleBarrage.startX = singleBarrage.startX - singleBarrage.speed
+      singleBarrage.startX = startX - speed
       singleBarrage.scrollOver = (singleBarrage.startX < -singleBarrage.contentWidth) ? true : false
       return singleBarrage.scrollOver
     });
@@ -128,3 +128,9 @@ class SingleBarrage {
     document.body.removeChild(temporaryNode)
   }
 }
+
+/**
+ * 主要思想
+ * 通过不断清理绘制canvas实习
+ * 
+ */
