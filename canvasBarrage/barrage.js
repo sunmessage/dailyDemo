@@ -26,7 +26,6 @@ class VideoBarrage {
       ctx: self.canvas.getContext('2d'),
       canvasWidth: self.video.width,
       canvasHeight: self.video.height,
-      X: self.video.width,
       officialData: self.initData.map(singleBarrage => new SingleBarrage(singleBarrage, self))
     }
 
@@ -45,17 +44,19 @@ class VideoBarrage {
     const self = this
     self.clearCanvas()
 
-    self.officialData.forEach(singleBarrage => {
+    const cancelAniamtion = self.officialData.map(singleBarrage => {
       const { color, fontSize, opacity, time, speed, value, startX, startY } = singleBarrage
       self.ctx.fillStyle = color
       self.ctx.font = fontSize
-      self.ctx.fillText(value, self.X, startY)
-    })
-
-    self.X--
+      self.ctx.fillText(value, startX, startY)
+      singleBarrage.startX--
+      singleBarrage.scrollOver = (singleBarrage.startX < -singleBarrage.contentWidth) ? true : false
+      return singleBarrage.scrollOver
+    });
 
     // requestAnimationFrame按一定的时间，周期完整执行回调函数
-    (self.canvasWidth > -600) && requestAnimationFrame(self.drawCanvas.bind(self))
+    cancelAniamtion.some(item => !item) && requestAnimationFrame(self.drawCanvas.bind(self))
+
   }
 
   // 清理弹幕内容
@@ -82,6 +83,7 @@ class SingleBarrage {
     const self = this
     const temporaryNode = document.createElement('p')
     temporaryNode.style.display = 'inline-block'
+    temporaryNode.style.fontSize = `${self.size}px`
     temporaryNode.innerText = self.value
     document.body.appendChild(temporaryNode)
 
@@ -90,8 +92,9 @@ class SingleBarrage {
       startY: Math.floor(Math.random() * parentClass.video.height),
       contentWidth: temporaryNode.clientWidth,
       contentHeight: temporaryNode.clientHeight,
+      scrollOver: false,
+      fontSize: `${self.size}px ${self.font}`,
     }
-
     Object.assign(self, singleBbarrageMessage)
 
     document.body.removeChild(temporaryNode)
