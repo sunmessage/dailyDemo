@@ -6,11 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>弹幕</title>
-  <!-- <style>
-    * {
-      display: inline;
-    }
-  </style> -->
 </head>
 
 <body>
@@ -24,67 +19,58 @@
     </div>
 
     <div class="content">
-      <input type="text" id="text">
-      <input type="button" id="button" value="发弹幕">
+      <input type="text" placeholder="弹幕内容" id="barrage">
+      <input type="button" id="send" value="发弹幕">
       <input type="color" id="color">
       <input type="range" id="range">
+      <input type="number" min="1" value="1" placeholder="倍数" type="text" id="speed">
     </div>
 
   </div>
 </body>
 <script src="../publicRelies/eventUtil.js"></script>
-<script src="../publicRelies/eventProxy.js"></script>
-<script src="barrage.js"></script>
+<script src="../publicRelies/barrage.js"></script>
+<script src="./data.js"></script>
 <script>
+  // 数据获取及定义
   const canvas = document.getElementById('canvas')
   const video = document.getElementById('video')
-  const content = document.querySelector('.content')
+  const barrage = document.querySelector('#barrage')
+  const send = document.querySelector('#send')
+  const color = document.querySelector('#color')
+  const range = document.querySelector('#range')
+  const speed = document.querySelector('#speed')
 
-  const initData = [
-    {
-      color: 'red',
-      size: 68,
-      font: 'serif',
-      opacity: 1,
-      time: 0,
-      speed: 0,
-      value: '埋埋超可爱',
-    },
-    {
-      color: 'red',
-      size: 68,
-      font: 'serif',
-      opacity: 1,
-      time: 0,
-      speed: 0,
-      startY: 160,
-      value: '埋埋超可爱',
-    },
-    {
-      color: 'green',
-      size: 68,
-      font: 'serif',
-      opacity: 1,
-      time: 0,
-      speed: 0,
-      startY: 60,
-      value: '埋埋超超超可爱',
-    },
-    {
-      color: 'blue',
-      size: 68,
-      font: 'serif',
-      opacity: 1,
-      time: 0,
-      speed: 0,
-      startY: 320,
-      value: '埋埋宇宙无敌超超超可爱',
-    },
-  ]
-
+  // 实例化对象，并绑定回调函数
   const videoBarrage = new VideoBarrage(canvas, video, initData)
-  const eventUtil = new EventUtil(content, 'click', videoBarrage.clearCanvas.bind(videoBarrage))
-  eventUtil.addHandler()
+  const videoEventUtil = new EventUtil(video, 'play', videoPlay)
+  const sendEventUtil = new EventUtil(send, 'click', sendClick)
+  videoEventUtil.addHandler('pause', videoPause)
+
+  // 各个动作交互回调函数
+  function videoPlay() {
+    videoBarrage.cancelCanvas = false
+    videoBarrage.drawCanvas()
+  }
+
+  function videoPause() {
+    videoBarrage.cancelCanvas = true
+  }
+
+  function sendClick(event) {
+    const addBarrage = {
+      color: color.value,
+      size: range.value,
+      font: 'serif',
+      speed: speed.value,
+      value: barrage.value,
+    }
+    
+    videoBarrage.initData.push(addBarrage)
+    videoBarrage.drawCanvas()
+    barrage.value = ''
+  }
+
 
 </script>
 

@@ -26,7 +26,9 @@ class VideoBarrage {
       ctx: self.canvas.getContext('2d'),
       canvasWidth: self.video.width,
       canvasHeight: self.video.height,
-      officialData: self.initData.map(singleBarrage => new SingleBarrage(singleBarrage, self))
+      officialData: self.initData.map(singleBarrage => new SingleBarrage(singleBarrage, self)),
+      cancelCanvas: true,
+      animationHander: requestAnimationFrame(() => {})
     }
 
     // 以这种手法增添类基础变量，挺不错的，针对类内部产生的数据
@@ -43,19 +45,23 @@ class VideoBarrage {
   drawCanvas() {
     const self = this
     self.clearCanvas()
+    self.fetchOfficialData()
+    self.clearLastAnimation()
 
     const cancelAniamtion = self.officialData.map(singleBarrage => {
       const { color, fontSize, opacity, time, speed, value, startX, startY } = singleBarrage
       self.ctx.fillStyle = color
       self.ctx.font = fontSize
       self.ctx.fillText(value, startX, startY)
-      singleBarrage.startX--
+      singleBarrage.startX = singleBarrage.startX - singleBarrage.speed
       singleBarrage.scrollOver = (singleBarrage.startX < -singleBarrage.contentWidth) ? true : false
       return singleBarrage.scrollOver
     });
 
     // requestAnimationFrame按一定的时间，周期完整执行回调函数
-    cancelAniamtion.some(item => !item) && requestAnimationFrame(self.drawCanvas.bind(self))
+    if(!self.cancelCanvas && cancelAniamtion.some(item => !item)) {
+       self.animationHander = requestAnimationFrame(self.drawCanvas.bind(self))
+    }
 
   }
 
@@ -63,6 +69,28 @@ class VideoBarrage {
   clearCanvas() {
     const self = this
     self.ctx.clearRect(0, 0, self.canvasWidth, self.canvasHeight)
+  }
+
+  // 刷新弹幕数量
+  fetchOfficialData() {
+    const self = this
+    if(self.officialData.length !== self.initData.length) {
+      const addDatas = self.initData.slice(self.officialData.length)
+      const addofficialDatas = []
+
+      addDatas.forEach(singleBarrage => {
+        if (singleBarrage.value !== '') {
+          addofficialDatas.push(new SingleBarrage(singleBarrage, self))
+        }
+      })
+      self.officialData.splice(self.officialData.length, addofficialDatas.length, ...addofficialDatas)
+    }
+  }
+
+  // 清除上次动画话柄
+  clearLastAnimation() {
+    const self = this
+    cancelAnimationFrame(self.animationHander)
   }
 
 }

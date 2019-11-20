@@ -11,6 +11,8 @@ class EventProxy {
   constructor(proxyTarget, proxyEvents) {
     this.proxyTarget = proxyTarget
     this.proxyEvents = Array.isArray(proxyEvents) ? [...proxyEvents] : [proxyEvents]
+
+    this.addAllHandlers()
   }
 
   addAllHandlers() {
