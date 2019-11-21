@@ -1,0 +1,67 @@
+.buringSnow-wheer-wrap {
+  position: relative;
+  width: 600px;
+  height: 300px;
+  border: 1px solid red;
+  overflow: hidden;
+}
+
+.buringSnow-wheer-content {
+  position: absolute;
+  display: flex;
+  height: 100%;
+  align-self: baseline;
+  justify-content: flex-start;
+}
+
+.buringSnow-wheer-content-beginLeft {
+  left: 0px;
+}
+
+.buringSnow-wheer-content-beginRight {
+  right: 0px;
+}
+
+.buringSnow-wheer-content-toLeft {
+  left: -100%;
+  transition-property: left;
+  transition-duration: 2s;
+  transition-timing-function: linear;
+}
+
+.buringSnow-wheer-content-toRight {
+  right: -100%;
+  transition-property: right;
+  transition-duration: 2s;
+  transition-timing-function: linear;
+}
+
+.buringSnow-wheer-content>img {
+  position: relative;
+  width: 600px;
+  height: 100%;
+}
+
+.buringSnow-wheer-navArrow {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid green;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buringSnow-wheer-navArrow>span {
+  padding: 20px;
+  background-color: red;
+  cursor: pointer;
+}
+
+.buringSnow-wheer-point {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  border: 1px solid blue;
+}

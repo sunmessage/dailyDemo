@@ -1,12 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>轮播图插件</title>
+  <link rel="stylesheet" href="./index.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .outer {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      justify-items: center;
+      align-items: center;
+    }
+
+  </style>
 </head>
+
 <body>
-  
+  <div class="outer"></div>
 </body>
+<script src="../publicRelies/eventUtil.js"></script>
+<script src="../publicRelies/baseDomOperate.js"></script>
+<script src="./index.js"></script>
+<script>
+  const imgNodeList = [
+    '../publicSource/img/1.jpg',
+    '../publicSource/img/2.jpg',
+    '../publicSource/img/3.jpg',
+    '../publicSource/img/4.jpg',
+    '../publicSource/img/5.jpg',
+    '../publicSource/img/6.jpg',
+  ]
+  const wheer = new Wheer(imgNodeList, '1', '2000')
+  const wrapNode = wheer.createDOM()
+  document.querySelector('.outer').appendChild(wrapNode)
+
+</script>
+
 </html>
